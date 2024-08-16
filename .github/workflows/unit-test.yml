@@ -21,4 +21,6 @@ jobs:
       - name: Test
         uses: actions/github-script@v7
         with:
-          script: npm test
+          script: |
+            npm install
+            npm test
