@@ -6,19 +6,32 @@ on:
       - development
 
 jobs:
-  unit-test:
-    name: "Check the unit tests"
+  test:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        shell: bash
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Test
-        uses: actions/github-script@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          script: npm run test
+          node-version: "20.x"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests and generate coverage
+        run: npm test -- --coverage
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: test-results/results.xml
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage
